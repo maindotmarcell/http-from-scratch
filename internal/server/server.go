@@ -67,34 +67,32 @@ func (s *HTTPServer) acceptLoop() {
 		}
 
 		fmt.Printf("Accepted connection. Reading from %s\n", conn.RemoteAddr().String())
-		go s.readLoop(conn)
+		go s.readFromConn(conn)
 	}
 }
 
-func (s *HTTPServer) readLoop(conn net.Conn) {
+func (s *HTTPServer) readFromConn(conn net.Conn) {
 	defer conn.Close()
 	buf := make([]byte, 2048)
-	for {
-		n, err := conn.Read(buf)
-		if err != nil {
-			if err != io.EOF {
-				fmt.Println("Error reading from connection: ", err.Error())
-			}
-			return
+	n, err := conn.Read(buf)
+	if err != nil {
+		if err != io.EOF {
+			fmt.Println("Error reading from connection: ", err.Error())
 		}
-
-		fmt.Printf("Message received from %s: %s\n", conn.RemoteAddr().String(), string(buf[:n]))
-
-		req := http.ParseRequest(buf[:n])
-		handler := s.Router.Route(req)
-		res := ""
-		if handler != nil {
-			res = handler(req)
-		} else {
-			res = http.FormatResponse(http.Response{Status: constants.StatusNotFound})
-		}
-
-		conn.Write([]byte(res))
-		fmt.Println("Reply has been sent to the client.")
+		return
 	}
+
+	fmt.Printf("Message received from %s: %s\n", conn.RemoteAddr().String(), string(buf[:n]))
+
+	req := http.ParseRequest(buf[:n])
+	handler := s.Router.Route(req)
+	res := ""
+	if handler != nil {
+		res = handler(req)
+	} else {
+		res = http.FormatResponse(http.Response{Status: constants.StatusNotFound})
+	}
+
+	conn.Write([]byte(res))
+	fmt.Println("Reply has been sent to the client.")
 }
