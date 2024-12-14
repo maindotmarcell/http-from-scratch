@@ -67,11 +67,11 @@ func (s *HTTPServer) acceptLoop() {
 		}
 
 		fmt.Printf("Accepted connection. Reading from %s\n", conn.RemoteAddr().String())
-		go s.readFromConn(conn)
+		go s.handleConn(conn)
 	}
 }
 
-func (s *HTTPServer) readFromConn(conn net.Conn) {
+func (s *HTTPServer) handleConn(conn net.Conn) {
 	defer conn.Close()
 	buf := make([]byte, 2048)
 	n, err := conn.Read(buf)

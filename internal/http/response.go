@@ -21,5 +21,6 @@ func FormatResponse(res Response) string {
 
 	sb.WriteString("\r\n")
 	sb.Write(res.Body)
+
 	return sb.String()
 }
