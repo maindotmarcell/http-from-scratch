@@ -1,6 +1,9 @@
 package router
 
 import (
+	"sort"
+	"strings"
+
 	"github.com/maindotmarcell/http-from-scratch/internal/http"
 )
 
@@ -31,8 +34,27 @@ func (r *Router) HandlePost(path string, handlerFunc HandlerFunc) {
 	r.routes["POST"][path] = handlerFunc
 }
 
-// Finds the handler function for the method and path present in the request
-// Returns nil if not found
+// Finds the handler function for the method and path present in the request.
+// If exact path match is not found it will look for the longest matching prefix in the path.
+// Returns nil if not found.
 func (r *Router) Route(req http.Request) HandlerFunc {
-	return r.routes[req.RequestLine.Method][req.RequestLine.Path]
+	path := req.RequestLine.Path
+	method := req.RequestLine.Method
+
+	// Get all registered paths for this method and sort them by length (longest first)
+	var paths []string
+	for registeredPath := range r.routes[method] {
+		paths = append(paths, registeredPath)
+	}
+	sort.Slice(paths, func(i, j int) bool {
+		return len(paths[i]) > len(paths[j])
+	})
+
+	// Check each registered route in order (longest to shortest)
+	for _, registeredPath := range paths {
+		if strings.HasPrefix(path, registeredPath) {
+			return r.routes[method][registeredPath]
+		}
+	}
+	return nil
 }

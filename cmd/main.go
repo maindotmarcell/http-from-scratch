@@ -8,11 +8,11 @@ import (
 )
 
 func main() {
-
 	s := server.NewHTTPServer("0.0.0.0:3000")
 
 	// Assign handlers to paths here
 	s.Router.HandleGet("/", handler.HandleRoot)
+	s.Router.HandleGet("/echo/", handler.HandleEcho)
 
 	// Starting the server
 	if err := s.Start(); err != nil {
