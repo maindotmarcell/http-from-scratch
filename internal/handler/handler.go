@@ -37,3 +37,15 @@ func HandleUserAgent(req http.Request) string {
 	}
 	return http.FormatResponse(res)
 }
+
+func HandlePostEcho(req http.Request) string {
+	echoStr := string(req.Body)
+	res := http.Response{Status: constants.StatusOK,
+		Headers: map[string]string{
+			"Content-Type":   "text/plain",
+			"Content-Length": fmt.Sprintf("%d", len(echoStr)),
+		},
+		Body: []byte(echoStr),
+	}
+	return http.FormatResponse(res)
+}
