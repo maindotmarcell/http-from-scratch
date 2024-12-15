@@ -33,8 +33,7 @@ func NewHTTPServer(listenAddr string) *HTTPServer {
 func (s *HTTPServer) Start() error {
 	ln, err := net.Listen("tcp", s.listenAddr)
 	if err != nil {
-		fmt.Printf("Failed to bind to %s\n", s.listenAddr)
-		os.Exit(1)
+		return fmt.Errorf("failed to bind to %s", s.listenAddr)
 	}
 
 	s.ln = ln

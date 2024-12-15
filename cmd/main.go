@@ -14,5 +14,8 @@ func main() {
 	// Assign handlers to paths here
 	s.Router.HandleGet("/", handler.HandleRoot)
 
-	log.Fatal(s.Start())
+	// Starting the server
+	if err := s.Start(); err != nil {
+		log.Fatal(err)
+	}
 }
