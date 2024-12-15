@@ -6,7 +6,13 @@ protocols (namely TCP and HTTP).
 
 ## Supported paths
 
-- `GET "/"`
+- `GET "/"` => sends back a status 200 response
+- `GET "/echo/{string to be echoed}"` => parses a string from the path and echoes it back in the response body
+
+Planned:
+
+- `GET "/user-agent"` => parses user-agent from the request headers and echoes it back in the response body
+- `POST "/echo" body: {string to be echoed}` => parses a string from the request body and echoes it back in the response body
 
 ## How to add additional paths
 
