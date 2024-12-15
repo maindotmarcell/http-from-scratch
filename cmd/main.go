@@ -13,6 +13,7 @@ func main() {
 	// Assign handlers to paths here
 	s.Router.HandleGet("/", handler.HandleRoot)
 	s.Router.HandleGet("/echo/", handler.HandleEcho)
+	s.Router.HandleGet("/user-agent", handler.HandleUserAgent)
 
 	// Starting the server
 	if err := s.Start(); err != nil {

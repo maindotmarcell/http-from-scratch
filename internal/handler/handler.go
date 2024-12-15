@@ -21,6 +21,19 @@ func HandleEcho(req http.Request) string {
 			"Content-Type":   "text/plain",
 			"Content-Length": fmt.Sprintf("%d", len(echoStr)),
 		},
-		Body: []byte(echoStr)}
+		Body: []byte(echoStr),
+	}
+	return http.FormatResponse(res)
+}
+
+func HandleUserAgent(req http.Request) string {
+	userAgent := req.Headers.UserAgent
+	res := http.Response{Status: constants.StatusOK,
+		Headers: map[string]string{
+			"Content-Type":   "text/plain",
+			"Content-Length": fmt.Sprintf("%d", len(userAgent)),
+		},
+		Body: []byte(userAgent),
+	}
 	return http.FormatResponse(res)
 }
