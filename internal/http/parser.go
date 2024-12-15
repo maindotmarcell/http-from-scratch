@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// parses the request, returning a Request struct with RequestLine, Headers and Body populated
 func ParseRequest(req []byte) Request {
 	requestLine, err := parseReqLine(req)
 	if err != nil {
@@ -16,11 +17,10 @@ func ParseRequest(req []byte) Request {
 	}
 	body := parseBody(req)
 
-	// For now, return a Request with just the RequestLine populated
 	return Request{
 		RequestLine: requestLine,
-		Headers:     headers, // Empty headers for now
-		Body:        body,    // Empty body for now
+		Headers:     headers,
+		Body:        body,
 	}
 }
 

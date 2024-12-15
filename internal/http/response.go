@@ -11,6 +11,7 @@ type Response struct {
 	Body    []byte
 }
 
+// Formats the response from the structu into a valid HTTP response string
 func FormatResponse(res Response) string {
 	var sb strings.Builder
 	sb.WriteString(fmt.Sprintf("HTTP/1.1 %s\r\n", res.Status))

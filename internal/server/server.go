@@ -20,7 +20,7 @@ type HTTPServer struct {
 	Router     router.Router
 }
 
-// NewServer(listenAddr string) returns an initialized Server struct, with it's listener address set as listenAddr
+// Returns an initialized Server struct, with it's listener address set as listenAddr
 func NewHTTPServer(listenAddr string) *HTTPServer {
 	return &HTTPServer{
 		listenAddr: listenAddr,
@@ -29,6 +29,7 @@ func NewHTTPServer(listenAddr string) *HTTPServer {
 	}
 }
 
+// Starts the server and keeps receiving connections until the quitch is closed
 func (s *HTTPServer) Start() error {
 	ln, err := net.Listen("tcp", s.listenAddr)
 	if err != nil {
@@ -49,6 +50,7 @@ func (s *HTTPServer) Start() error {
 	return nil
 }
 
+// Creates a channel and handels interrupt signals to facilitate graceful shutdown
 func (s *HTTPServer) handleSignals() {
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
@@ -58,6 +60,7 @@ func (s *HTTPServer) handleSignals() {
 	close(s.quitch)
 }
 
+// Accepts TCP connections concurrently and calls handleConn for each of them
 func (s *HTTPServer) acceptLoop() {
 	for {
 		conn, err := s.ln.Accept()
@@ -71,6 +74,8 @@ func (s *HTTPServer) acceptLoop() {
 	}
 }
 
+// Reads from the connection, parses the http request, calls the appropriate handler and writes the response to the connection.
+// If the method/path combination is not found it will write a 404 NOT FOUND response to the connection.
 func (s *HTTPServer) handleConn(conn net.Conn) {
 	defer conn.Close()
 	buf := make([]byte, 2048)
