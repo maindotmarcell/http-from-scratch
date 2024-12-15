@@ -21,5 +21,4 @@ protocols (namely TCP and HTTP).
 ## Roadmap
 
 - Keeping connections alive and support for `Connection: close` headers
-- Support for common headers
-- Creating and fetching files
+- Support for additional commonly used headers

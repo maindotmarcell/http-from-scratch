@@ -24,14 +24,19 @@ func New() *Router {
 	return r
 }
 
-// Handles GET requests
-func (r *Router) HandleGet(path string, handlerFunc HandlerFunc) {
-	r.routes["GET"][path] = handlerFunc
+// Handles assigning handler functions to method and path combinations
+func (r *Router) handle(method string, path string, handlerFunc HandlerFunc) {
+	r.routes[method][path] = handlerFunc
 }
 
-// Handles POST requests
+// Handles GET requests. Wrapper function for assigning handler functions to GET paths
+func (r *Router) HandleGet(path string, handlerFunc HandlerFunc) {
+	r.handle("GET", path, handlerFunc)
+}
+
+// Handles POST requests. Wrapper function for assigning handler functions to POST paths.
 func (r *Router) HandlePost(path string, handlerFunc HandlerFunc) {
-	r.routes["POST"][path] = handlerFunc
+	r.handle("POST", path, handlerFunc)
 }
 
 // Finds the handler function for the method and path present in the request.
