@@ -11,6 +11,14 @@ protocols (namely TCP and HTTP).
 - `GET "/user-agent"` => parses user-agent from the request headers and echoes it back in the response body
 - `POST "/echo" body: {string to be echoed}` => parses a string from the request body and echoes it back in the response body
 
+## How to run the app
+
+Execute the following command:
+
+```bash
+go run cmd/main.go
+```
+
 ## How to add additional paths
 
 1. Create a handler function in [handler.go](internal/handler/handler.go) such that it takes in an http request and
